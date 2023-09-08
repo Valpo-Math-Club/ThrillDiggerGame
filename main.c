@@ -57,6 +57,7 @@ int main() {
         int userCol;
 
         rescan_userInput:
+        userRow = userCol = -1;
         fgets(buffer, sizeof(buffer), stdin);
         sscanf(buffer, "%c %d", &userColChar, &userRow);
 
