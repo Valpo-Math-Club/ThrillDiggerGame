@@ -26,12 +26,12 @@ int* bomb_indices;
 int main() {
     srand(time(NULL));
 
-    char* gameboard = malloc(ROWS*COLS*sizeof(char));
+    char* gameboard = (char*) malloc(ROWS*COLS*sizeof(char));
     for(int i = 0; i < ROWS*COLS; i++) {
         gameboard[i] = ' ';
     }
 
-    bomb_indices = malloc(NUMBOMBS*sizeof(int));
+    bomb_indices = (int*) malloc(NUMBOMBS*sizeof(int));
 
     // this forloop fills the bomb_indices array with NUMBOMBS distinct ints in [0, ROWS*COLS)
     for(int i = 0; i < NUMBOMBS; i++) {
@@ -60,14 +60,14 @@ int main() {
         fgets(buffer, sizeof(buffer), stdin);
         sscanf(buffer, "%c %d", &userColChar, &userRow);
 
-        fflush(stdout);
+        fflush(stdin);
 
         // quicker atoi
         userCol = userColChar - 'a';
 
         // sanitize the input
         // check if input is in bounds and if that square has been checked already
-        if(userRow < 0 || userRow > ROWS || userCol < 0 || userCol > COLS || gameboard[userRow*ROWS + userCol] != ' ') goto rescan_userInput;
+        if(userRow < 0 || userRow >= ROWS || userCol < 0 || userCol >= COLS || gameboard[userRow*COLS + userCol] != ' ') goto rescan_userInput;
 
 
         int userIndex = userRow*COLS + userCol;
