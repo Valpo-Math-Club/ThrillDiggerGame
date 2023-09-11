@@ -2,39 +2,31 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
-
+// macros
 #define ROWS 8
 #define COLS 9
-#define NUMBOMBS 16
-
-// all these thresholds are inclusive
-#define GREEN_THRESHOLD 0
-#define GREEN_VALUE 1
-#define BLUE_THRESHOLD 2
-#define BLUE_VALUE 5
-#define RED_THRESHOLD 8
-#define RED_VALUE 20
-
-int numBadNeighbors(int rows, int cols, int testIndex);
+#define NUM_BOMBS 16
+#define NUM_RUPEES 5
+// constants
+const unsigned int  THRESHOLDS[NUM_RUPEES] = {0, 2, 4, 6, 8};
+const unsigned int  VALUES[NUM_RUPEES] = {1, 5, 20, 100, 300};
+const unsigned char BOARD_REP[NUM_RUPEES] = {'G', 'B', 'R', 'S', 'A'};
+// functions
+int  numBadNeighbors(int rows, int cols, int testIndex);
+int  arrayHasElement(int* arr, int length, int value);
 void print_board(char* arr, int rows, int cols);
-int arrayHasElement(int* arr, int length, int value);
 bool isBad(int index);
 
-// needs to be global such that isBad can access
-int* bomb_indices;
+int bomb_indices[NUM_BOMBS];
 
 int main(void) {
     srand(time(NULL));
 
-    char* gameboard = (char*) malloc(ROWS*COLS*sizeof(char));
-    for(int i = 0; i < ROWS*COLS; i++) {
-        gameboard[i] = ' ';
-    }
+    char* gameboard = calloc(ROWS * COLS, sizeof(char));
+    for(int i = 0; i < ROWS*COLS; i++) gameboard[i] = ' ';
 
-    bomb_indices = (int*) malloc(NUMBOMBS*sizeof(int));
-
-    // this forloop fills the bomb_indices array with NUMBOMBS distinct ints in [0, ROWS*COLS)
-    for(int i = 0; i < NUMBOMBS; i++) {
+    // this forloop fills the bomb_indices array with NUM_BOMBS distinct ints in [0, ROWS*COLS)
+    for(int i = 0; i < NUM_BOMBS; i++) {
         rerollBombIndex:
         bomb_indices[i] = rand() % (ROWS*COLS);
 
@@ -77,7 +69,10 @@ int main(void) {
         if(isBad(userIndex)) {
             printf("GAME OVER ):<\n");
             break;
-        } else if(badNeighbors <= GREEN_THRESHOLD) {
+        } 
+		else
+		
+		 if(badNeighbors <= GREEN_THRESHOLD) {
             gameboard[userIndex] = 'G';
             playerCredit += GREEN_VALUE;
         } else if(badNeighbors <= BLUE_THRESHOLD) {
@@ -97,7 +92,7 @@ int main(void) {
 
 // check if the element "index" appears in "bomb_indices"
 bool isBad(int index) {
-    for(int i = 0; i < NUMBOMBS; i++) {
+    for(int i = 0; i < NUM_BOMBS; i++) {
         if(bomb_indices[i] == index) return true;
     }
 
