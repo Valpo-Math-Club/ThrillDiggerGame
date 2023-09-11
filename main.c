@@ -83,6 +83,7 @@ int main(void) {
             playerCredit += RED_VALUE;
         }
 
+        printf("Credit: %d\n", playerCredit);
         print_board(gameboard, ROWS, COLS);
         fflush(stdout);
     }
