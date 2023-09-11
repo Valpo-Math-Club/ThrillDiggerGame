@@ -23,7 +23,7 @@ bool isBad(int index);
 // needs to be global such that isBad can access
 int* bomb_indices;
 
-int main() {
+int main(void) {
     srand(time(NULL));
 
     char* gameboard = (char*) malloc(ROWS*COLS*sizeof(char));
@@ -209,3 +209,4 @@ void print_board(char* arr, int rows, int cols) {
     }
 
 }
+

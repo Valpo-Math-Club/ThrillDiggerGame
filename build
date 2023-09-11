@@ -1,0 +1,3 @@
+#!/bin/sh
+
+clang -Wall -Wextra -pedantic -std=c17 -g main.c -o thrill_digger
