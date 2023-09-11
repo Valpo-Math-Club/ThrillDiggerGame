@@ -5,12 +5,13 @@
 // macros
 #define ROWS 8
 #define COLS 9
+#define BOARD_SIZE ROWS * COLS
 #define NUM_BOMBS 16
 #define NUM_RUPEE_TYPES 5
 // constants
-const unsigned int  THRESHOLDS[NUM_RUPEE_TYPES] = {0, 2, 4, 6, 8};
-const unsigned int  VALUES[NUM_RUPEE_TYPES] = {1, 5, 20, 100, 300};
-const unsigned char BOARD_REPS[NUM_RUPEE_TYPES] = {'G', 'B', 'R', 'S', 'A'};
+const int  THRESHOLDS[NUM_RUPEE_TYPES] = {0, 2, 4, 6, 8};
+const int  VALUES[NUM_RUPEE_TYPES] = {1, 5, 20, 100, 300};
+const char BOARD_REPS[NUM_RUPEE_TYPES] = {'G', 'B', 'R', 'S', 'A'};
 // functions
 int  numBadNeighbors(int rows, int cols, int testIndex);
 int  arrayHasElement(int* arr, int length, int value);
@@ -22,12 +23,13 @@ int bomb_indices[NUM_BOMBS];
 int main(void) {
 	srand(time(NULL));
 
-	char* gameboard = calloc(ROWS * COLS, sizeof(char));
+	char* gameboard = calloc(BOARD_SIZE, sizeof(char));
+	for(int i = 0; i < BOARD_SIZE; i++) gameboard[i] = ' ';
 
 	// this forloop fills the bomb_indices array with NUM_BOMBS distinct ints in [0, ROWS*COLS)
 	for(int i = 0; i < NUM_BOMBS; i++) {
 		rerollBombIndex:
-		bomb_indices[i] = rand() % (ROWS * COLS);
+		bomb_indices[i] = rand() % (BOARD_SIZE);
 
 		for(int j = 0; j < i; j++) {
 			if(bomb_indices[i] == bomb_indices[j]) {
@@ -61,12 +63,17 @@ int main(void) {
 
 		// sanitize the input
 		// check if input is in bounds and if that square has been checked already
-		if(userRow < 0 || userRow >= ROWS || userCol < 0 || userCol >= COLS || gameboard[userRow*COLS + userCol] != ' ') goto rescan_userInput;
+		bool outside_row_range = (userRow < 0 || userRow >= ROWS);
+		bool outside_col_range = (userCol < 0 || userCol >= COLS);
+		bool non_empty_space = gameboard[userRow*COLS + userCol] != ' ';
 
+		if(outside_row_range || outside_col_range || non_empty_space) 
+			goto rescan_userInput;
 
 		int userIndex = (userRow * COLS) + userCol;
 
 		int badNeighbors = numBadNeighbors(ROWS, COLS, userIndex);
+
 		if(isBad(userIndex)) {
 			printf("GAME OVER ):<\n");
 			break;
