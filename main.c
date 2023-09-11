@@ -46,7 +46,6 @@ int main(void) {
 	fflush(stdout);
 
 	while(true) {
-
 		char userColChar;
 		int userRow;
 		int userCol;
