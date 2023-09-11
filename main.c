@@ -50,24 +50,30 @@ int main(void) {
 		int userRow;
 		int userCol;
 
-		rescan_userInput:
-		userRow = userCol = -1;
-		fgets(buffer, sizeof(buffer), stdin);
-		sscanf(buffer, "%c %d", &userColChar, &userRow);
+		// booleans such that we can
+		// check whether or not
+		// the input is in bounds
+		// and the square has already
+		// been chosen by the player
+		// already
+		bool outside_row_range, outside_col_range, non_empty_space;
+		do {
+			userRow = userCol = -1;
+			fgets(buffer, sizeof(buffer), stdin);
+			sscanf(buffer, "%c %d", &userColChar, &userRow);
 
-		fflush(stdin);
+			fflush(stdin);
 
-		// quicker atoi
-		userCol = userColChar - 'a';
+			// quicker atoi
+			userCol = userColChar - 'a';
 
-		// sanitize the input
-		// check if input is in bounds and if that square has been checked already
-		bool outside_row_range = (userRow < 0 || userRow >= ROWS);
-		bool outside_col_range = (userCol < 0 || userCol >= COLS);
-		bool non_empty_space = gameboard[userRow*COLS + userCol] != ' ';
+			// sanitize the input
+			// check if input is in bounds and if that square has been checked already
+			outside_row_range = (userRow < 0 || userRow >= ROWS);
+			outside_col_range = (userCol < 0 || userCol >= COLS);
+			non_empty_space = gameboard[userRow*COLS + userCol] != ' ';
 
-		if(outside_row_range || outside_col_range || non_empty_space) 
-			goto rescan_userInput;
+		} while(outside_row_range || outside_col_range || non_empty_space);
 
 		int userIndex = (userRow * COLS) + userCol;
 
