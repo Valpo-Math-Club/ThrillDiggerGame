@@ -9,7 +9,7 @@
 #define BOARD_SIZE (ROWS * COLS)
 #define NUM_BOMBS 16
 #define NUM_RUPEE_TYPES 5
-#define DEBUG_STATEMENTS true
+#define DEBUG_STATEMENTS false
 // constants
 enum RUPEE_TYPES{
 	GREEN_RUPEE ,
@@ -49,7 +49,7 @@ int main(void) {
 				i--;
 			}
 		}
-		
+
 		if(DEBUG_STATEMENTS) sleep(1);
 	}
 
