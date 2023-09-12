@@ -2,60 +2,67 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <unistd.h>
 // macros
 #define ROWS 8
 #define COLS 9
-#define BOARD_SIZE ROWS * COLS
+#define BOARD_SIZE (ROWS * COLS)
 #define NUM_BOMBS 16
 #define NUM_RUPEE_TYPES 5
+#define DEBUG_STATEMENTS true
 // constants
+enum RUPEE_TYPES{
+	GREEN_RUPEE ,
+	BLUE_RUPEE  ,
+	RED_RUPEE   ,
+	SILVER_RUPEE,
+	GOLD_RUPEE
+};
 const int  THRESHOLDS[NUM_RUPEE_TYPES] = {0, 2, 4, 6, 8};
 const int  VALUES[NUM_RUPEE_TYPES] = {1, 5, 20, 100, 300};
-const char BOARD_REPS[NUM_RUPEE_TYPES] = {'G', 'B', 'R', 'S', 'A'};
+const char BOARD_CHARS[NUM_RUPEE_TYPES] = {'G', 'B', 'R', 'S', 'A'};
 // functions
 int  numBadNeighbors(int rows, int cols, int testIndex);
 int  arrayHasElement(int* arr, int length, int value);
+void print_arr(int* arr, int arr_size);
 void print_board(char* arr, int rows, int cols);
 bool isBad(int index);
 
 int bomb_indices[NUM_BOMBS];
 
 int main(void) {
+	int playerCredit = 0;
+	char buffer[100];
+	char* gameboard = calloc(BOARD_SIZE, sizeof(char));
+
 	srand(time(NULL));
 
-	char* gameboard = calloc(BOARD_SIZE, sizeof(char));
 	for(int i = 0; i < BOARD_SIZE; i++) gameboard[i] = ' ';
 
 	// this forloop fills the bomb_indices array with NUM_BOMBS distinct ints in [0, ROWS*COLS)
 	for(int i = 0; i < NUM_BOMBS; i++) {
-		rerollBombIndex:
 		bomb_indices[i] = rand() % (BOARD_SIZE);
+		if(DEBUG_STATEMENTS) print_arr(bomb_indices, NUM_BOMBS);
 
 		for(int j = 0; j < i; j++) {
 			if(bomb_indices[i] == bomb_indices[j]) {
-				goto rerollBombIndex;
+				i--;
 			}
 		}
+		
+		if(DEBUG_STATEMENTS) sleep(1);
 	}
 
 	// each turn goes like this
-	int playerCredit = 0;
-	char buffer[100];
-
+	
 	print_board(gameboard, ROWS, COLS);
 	fflush(stdout);
 
 	while(true) {
-		char userColChar;
 		int userRow;
 		int userCol;
+		char userColChar;
 
-		// booleans such that we can
-		// check whether or not
-		// the input is in bounds
-		// and the square has already
-		// been chosen by the player
-		// already
 		bool outside_row_range, outside_col_range, non_empty_space;
 		do {
 			userRow = userCol = -1;
@@ -67,16 +74,12 @@ int main(void) {
 			// quicker atoi
 			userCol = userColChar - 'a';
 
-			// sanitize the input
-			// check if input is in bounds and if that square has been checked already
 			outside_row_range = (userRow < 0 || userRow >= ROWS);
 			outside_col_range = (userCol < 0 || userCol >= COLS);
 			non_empty_space = gameboard[userRow*COLS + userCol] != ' ';
-
 		} while(outside_row_range || outside_col_range || non_empty_space);
 
 		int userIndex = (userRow * COLS) + userCol;
-
 		int badNeighbors = numBadNeighbors(ROWS, COLS, userIndex);
 
 		if(isBad(userIndex)) {
@@ -84,9 +87,9 @@ int main(void) {
 			break;
 		}
 		else{
-			for(int i = 0; i < NUM_RUPEE_TYPES; i++){
+			for(int i = GREEN_RUPEE; i < NUM_RUPEE_TYPES; i++){
 				if(badNeighbors <= THRESHOLDS[i]){
-					gameboard[userIndex] = BOARD_REPS[i];
+					gameboard[userIndex] = BOARD_CHARS[i];
 					playerCredit += VALUES[i];
 				}
 			}
@@ -102,9 +105,8 @@ int main(void) {
 
 // check if the element "index" appears in "bomb_indices"
 bool isBad(int index) {
-	for(int i = 0; i < NUM_BOMBS; i++) {
+	for(int i = 0; i < NUM_BOMBS; i++)
 		if(bomb_indices[i] == index) return true;
-	}
 
 	return false;
 }
@@ -178,6 +180,14 @@ int numBadNeighbors(int rows, int cols, int testIndex) {
 
 
 	return result;
+}
+
+void print_arr(int* arr, int arr_size){
+	printf("[ ");
+	for(int i = 0; i < arr_size; i++){
+		printf("%d ", arr[i]);
+	}
+	printf("]\n");
 }
 
 void print_board(char* arr, int rows, int cols) {
