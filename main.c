@@ -79,23 +79,22 @@ int main(void) {
 
 		if(arrayHasElement(bomb_indices, NUM_BOMBS, userIndex)) {
 			printf("GAME OVER ):<\n");
-			break;
+			return 0;
 		}
 		else{
 			for(int i = GREEN_RUPEE; i < NUM_RUPEE_TYPES; i++){
 				if(badNeighbors <= THRESHOLDS[i]){
 					gameboard[userIndex] = BOARD_CHARS[i];
 					playerCredit += VALUES[i];
+					break;
 				}
 			}
-		}
-		
-		printf("Credit: %d\n", playerCredit);
-		print_board(gameboard, ROWS, COLS);
-		fflush(stdout);
-	}
 
-	return 0;
+			printf("Credit: %d\n", playerCredit);
+			print_board(gameboard, ROWS, COLS);
+			fflush(stdout);
+		}
+	}
 }
 
 bool arrayHasElement(int* arr, int length, int value){
@@ -164,13 +163,13 @@ void print_board(char* arr, int rows, int cols) {
 	// space for letter in left margin
 	printf(" ");
 	for(int i = 0; i < cols; i++) {
-		printf(" %c", 'a'+i);
+		printf(" %c", 'a' + i);
 	}
 	printf("\n");
 
 	// first row of hyphens
 	printf(" ");
-	for(int i = 0; i < cols*2 + 1; i++) {
+	for(int i = 0; i < (cols * 2) + 1; i++) {
 		printf("-");
 	}
 	printf("\n");
@@ -179,13 +178,13 @@ void print_board(char* arr, int rows, int cols) {
 	for(int i = 0; i < rows; i++) {
 		printf("%d|", i);
 		for(int j = 0; j < cols; j++) {
-			printf("%c|", arr[i*cols + j]);
+			printf("%c|", arr[(i * cols) + j]);
 		}
 		printf("\n");
 
 		// printing the hyphens
 		printf(" ");
-		for(int j = 0; j < cols*2 + 1; j++) {
+		for(int j = 0; j < (cols * 2) + 1; j++) {
 			printf("-");
 		}
 		printf("\n");
