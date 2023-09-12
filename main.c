@@ -77,7 +77,7 @@ int main(void) {
 		int userIndex = (userRow * COLS) + userCol;
 		int badNeighbors = numBadNeighbors(bomb_indices, ROWS, COLS, userIndex);
 
-		if(arrayHasElement(bomb_indices, userIndex)) {
+		if(arrayHasElement(bomb_indices, NUM_BOMBS, userIndex)) {
 			printf("GAME OVER ):<\n");
 			break;
 		}
@@ -116,34 +116,34 @@ int numBadNeighbors(int* bomb_indices, int rows, int cols, int testIndex) {
 	// to-do: refactor later
 	if(hasUpperNeighbors) {
 		if(hasLeftNeighbors){
-			if(arrayHasElement(bomb_indices, testIndex - 1 - cols))
+			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex - 1 - cols))
 				result++;
 		}
 		if(hasRightNeighbors){
-			if(arrayHasElement(bomb_indices, testIndex + 1 - cols))
+			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + 1 - cols))
 				result++;
 		}
-		if(arrayHasElement(bomb_indices, testIndex - cols))
+		if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex - cols))
 			result++;
 	}
 	if(hasLowerNeighbors){
 		if(hasLeftNeighbors){
-			if(arrayHasElement(bomb_indices, testIndex + cols - 1))
+			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + cols - 1))
 				result++;
 		}
 		if(hasRightNeighbors){
-			if(arrayHasElement(bomb_indices, testIndex + cols + 1))
+			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + cols + 1))
 				result++;
 		}
-		if(arrayHasElement(bomb_indices, testIndex + cols))
+		if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + cols))
 			result++;
 	}
 	if(hasLeftNeighbors){
-		if(arrayHasElement(bomb_indices, testIndex - 1))
+		if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex - 1))
 			result++;
 	}
 	if(hasRightNeighbors){
-		if(arrayHasElement(bomb_indices, testIndex + 1))
+		if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + 1))
 			result++;
 	}
 
