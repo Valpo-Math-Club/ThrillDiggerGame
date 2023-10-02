@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <unistd.h>
+#include "Helpers.h"
 // macros
 #define ROWS 8
 #define COLS 9
@@ -22,19 +23,28 @@ const int  THRESHOLDS[NUM_RUPEE_TYPES] = {0, 2, 4, 6, 8};
 const int  VALUES[NUM_RUPEE_TYPES] = {1, 5, 20, 100, 300};
 const char BOARD_CHARS[NUM_RUPEE_TYPES] = {'G', 'B', 'R', 'S', 'A'};
 // functions
-int  numBadNeighbors(int* bomb_indices, int rows, int cols, int testIndex);
-void print_arr(int* arr, int arr_size);
-void print_board(char* arr, int rows, int cols);
-bool arrayHasElement(int* arr, int length, int value);
+void loop();
 
+
+
+#ifndef ARDUINO
 int main(void) {
+	while(1) loop();
+}
+#endif
+
+void loop() {
 	int playerCredit = 0;
 
 	char buffer[100];
 	int bomb_indices[NUM_BOMBS];
-	char* gameboard = calloc(BOARD_SIZE, sizeof(char));
+	char* gameboard = (char*) calloc(BOARD_SIZE, sizeof(char));
 
-	srand(time(NULL));
+	#ifdef ARDUINO
+		srand(analogRead(0));
+	#else
+		srand(time(NULL));
+	#endif
 
 	for(int i = 0; i < BOARD_SIZE; i++) gameboard[i] = ' ';
 
@@ -79,7 +89,7 @@ int main(void) {
 
 		if(arrayHasElement(bomb_indices, NUM_BOMBS, userIndex)) {
 			printf("GAME OVER ):<\n");
-			return 0;
+			return;
 		}
 		else{
 			for(int i = GREEN_RUPEE; i < NUM_RUPEE_TYPES; i++){
@@ -148,47 +158,3 @@ int numBadNeighbors(int* bomb_indices, int rows, int cols, int testIndex) {
 
 	return result;
 }
-
-void print_arr(int* arr, int arr_size){
-	printf("[ ");
-	for(int i = 0; i < arr_size; i++){
-		printf("%d ", arr[i]);
-	}
-	printf("]\n");
-}
-
-void print_board(char* arr, int rows, int cols) {
-	// first we print the letters adorning the top of the board
-
-	// space for letter in left margin
-	printf(" ");
-	for(int i = 0; i < cols; i++) {
-		printf(" %c", 'a' + i);
-	}
-	printf("\n");
-
-	// first row of hyphens
-	printf(" ");
-	for(int i = 0; i < (cols * 2) + 1; i++) {
-		printf("-");
-	}
-	printf("\n");
-
-	// printing the rest of the board
-	for(int i = 0; i < rows; i++) {
-		printf("%d|", i);
-		for(int j = 0; j < cols; j++) {
-			printf("%c|", arr[(i * cols) + j]);
-		}
-		printf("\n");
-
-		// printing the hyphens
-		printf(" ");
-		for(int j = 0; j < (cols * 2) + 1; j++) {
-			printf("-");
-		}
-		printf("\n");
-	}
-
-}
-
