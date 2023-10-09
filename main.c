@@ -1,3 +1,6 @@
+// uncomment to trigger arduino mode
+//#define ARDUINO
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -11,6 +14,7 @@
 #define NUM_BOMBS 16
 #define NUM_RUPEE_TYPES 5
 #define DEBUG_STATEMENTS false
+
 // constants
 enum RUPEE_TYPES{
 	GREEN_RUPEE ,
