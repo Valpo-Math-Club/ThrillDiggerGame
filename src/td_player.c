@@ -14,7 +14,7 @@ const char BOARD_CHARS[NUM_RUPEE_TYPES] = {'G', 'B', 'R', 'W', 'Y'};
 // functions
 int  numBadNeighbors(int* bomb_indices, int testIndex);
 void print_arr(int* arr, int arr_size);
-void print_board(char* arr, int rows, int cols);
+void print_board(char* arr);
 bool arrayHasElement(int* arr, int length, int value);
 
 int main(void) {
@@ -42,7 +42,7 @@ int main(void) {
 		if(DEBUG_STATEMENTS) sleep(1);
 	}
 
-	print_board(gameboard, ROWS, COLS);
+	print_board(gameboard);
 	fflush(stdout);
 
 	while(true) {
@@ -147,34 +147,34 @@ void print_arr(int* arr, int arr_size){
 	printf("]\n");
 }
 
-void print_board(char* arr, int rows, int cols) {
+void print_board(char* arr) {
 	// first we print the letters adorning the top of the board
 
 	// space for letter in left margin
 	printf(" ");
-	for(int i = 0; i < cols; i++) {
+	for(int i = 0; i < COLS; i++) {
 		printf(" %c", 'a' + i);
 	}
 	printf("\n");
 
 	// first row of hyphens
 	printf(" ");
-	for(int i = 0; i < (cols * 2) + 1; i++) {
+	for(int i = 0; i < (COLS * 2) + 1; i++) {
 		printf("-");
 	}
 	printf("\n");
 
 	// printing the rest of the board
-	for(int i = 0; i < rows; i++) {
+	for(int i = 0; i < ROWS; i++) {
 		printf("%d|", i);
-		for(int j = 0; j < cols; j++) {
-			printf("%c|", arr[(i * cols) + j]);
+		for(int j = 0; j < COLS; j++) {
+			printf("%c|", arr[(i * COLS) + j]);
 		}
 		printf("\n");
 
 		// printing the hyphens
 		printf(" ");
-		for(int j = 0; j < (cols * 2) + 1; j++) {
+		for(int j = 0; j < (COLS * 2) + 1; j++) {
 			printf("-");
 		}
 		printf("\n");
