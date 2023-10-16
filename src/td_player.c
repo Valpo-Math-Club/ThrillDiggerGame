@@ -1,8 +1,8 @@
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <time.h>
 #include <unistd.h>
+#include <stdbool.h>
 //personal headers
 #include "./../lib/thrill_digger.h"
 
@@ -10,9 +10,9 @@
 // constants
 const int  THRESHOLDS[NUM_RUPEE_TYPES] = {0, 2, 4, 6, 8};
 const int  VALUES[NUM_RUPEE_TYPES] = {1, 5, 20, 100, 300};
-const char BOARD_CHARS[NUM_RUPEE_TYPES] = {'G', 'B', 'R', 'S', 'Y'};
+const char BOARD_CHARS[NUM_RUPEE_TYPES] = {'G', 'B', 'R', 'W', 'Y'};
 // functions
-int  numBadNeighbors(int* bomb_indices, int rows, int cols, int testIndex);
+int  numBadNeighbors(int* bomb_indices, int testIndex);
 void print_arr(int* arr, int arr_size);
 void print_board(char* arr, int rows, int cols);
 bool arrayHasElement(int* arr, int length, int value);
@@ -65,10 +65,10 @@ int main(void) {
 		} while(outside_row_range || outside_col_range || non_empty_space);
 
 		int userIndex = (userRow * COLS) + userCol;
-		int badNeighbors = numBadNeighbors(bomb_indices, ROWS, COLS, userIndex);
+		int badNeighbors = numBadNeighbors(bomb_indices, userIndex);
 
 		if(arrayHasElement(bomb_indices, NUM_BOMBS, userIndex)) {
-			printf("GAME OVER ):<\n");
+			printf("GAME OVER.\nSCORE: %d\n", playerCredit);
 			return 0;
 		}
 		else{
@@ -94,37 +94,37 @@ bool arrayHasElement(int* arr, int length, int value){
 	return false;
 }
 
-int numBadNeighbors(int* bomb_indices, int rows, int cols, int testIndex) {
+int numBadNeighbors(int* bomb_indices, int testIndex) {
 	int result = 0;
 
-	bool hasLeftNeighbors  = ((testIndex % cols) != 0);
-	bool hasRightNeighbors = (((testIndex + 1) % cols ) != 0);
-	bool hasUpperNeighbors = ((testIndex / cols) != 0);
-	bool hasLowerNeighbors = ((testIndex / cols) != (rows - 1));
+	bool hasLeftNeighbors  = ((testIndex % COLS) != 0);
+	bool hasRightNeighbors = (((testIndex + 1) % COLS ) != 0);
+	bool hasUpperNeighbors = ((testIndex / COLS) != 0);
+	bool hasLowerNeighbors = ((testIndex / COLS) != (ROWS - 1));
 	// there's definitely a better way to do this, but this is more concise
 	// to-do: refactor later
 	if(hasUpperNeighbors) {
 		if(hasLeftNeighbors){
-			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex - 1 - cols))
+			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex - 1 - COLS))
 				result++;
 		}
 		if(hasRightNeighbors){
-			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + 1 - cols))
+			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + 1 - COLS))
 				result++;
 		}
-		if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex - cols))
+		if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex - COLS))
 			result++;
 	}
 	if(hasLowerNeighbors){
 		if(hasLeftNeighbors){
-			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + cols - 1))
+			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + COLS - 1))
 				result++;
 		}
 		if(hasRightNeighbors){
-			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + cols + 1))
+			if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + COLS + 1))
 				result++;
 		}
-		if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + cols))
+		if(arrayHasElement(bomb_indices, NUM_BOMBS, testIndex + COLS))
 			result++;
 	}
 	if(hasLeftNeighbors){
