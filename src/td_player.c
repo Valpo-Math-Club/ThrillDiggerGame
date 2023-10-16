@@ -3,24 +3,14 @@
 #include <stdbool.h>
 #include <time.h>
 #include <unistd.h>
-// macros
-#define ROWS 8
-#define COLS 9
-#define BOARD_SIZE (ROWS * COLS)
-#define NUM_BOMBS 16
-#define NUM_RUPEE_TYPES 5
+//personal headers
+#include "./../lib/thrill_digger.h"
+
 #define DEBUG_STATEMENTS false
 // constants
-enum RUPEE_TYPES{
-	GREEN_RUPEE ,
-	BLUE_RUPEE  ,
-	RED_RUPEE   ,
-	SILVER_RUPEE,
-	GOLD_RUPEE
-};
 const int  THRESHOLDS[NUM_RUPEE_TYPES] = {0, 2, 4, 6, 8};
 const int  VALUES[NUM_RUPEE_TYPES] = {1, 5, 20, 100, 300};
-const char BOARD_CHARS[NUM_RUPEE_TYPES] = {'G', 'B', 'R', 'S', 'A'};
+const char BOARD_CHARS[NUM_RUPEE_TYPES] = {'G', 'B', 'R', 'S', 'Y'};
 // functions
 int  numBadNeighbors(int* bomb_indices, int rows, int cols, int testIndex);
 void print_arr(int* arr, int arr_size);
