@@ -81,7 +81,7 @@ int main(void) {
 			}
 
 			printf("Credit: %d\n", playerCredit);
-			print_board(gameboard, ROWS, COLS);
+			print_board(gameboard);
 			fflush(stdout);
 		}
 	}
