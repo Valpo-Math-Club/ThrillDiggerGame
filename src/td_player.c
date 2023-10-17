@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 //personal headers
-#include "./../lib/thrill_digger.h"
+#include "./../include/thrill_digger.h"
 
 #define DEBUG_STATEMENTS false
 // constants

@@ -4,5 +4,5 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-#include "./../lib/thrill_digger.h"
+#include "./../include/thrill_digger.h"
 
