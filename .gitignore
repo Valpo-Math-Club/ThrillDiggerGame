@@ -1,6 +1,7 @@
 tdplayer
 tdboardgen
 tdsolver
+.vscode
 # Prerequisites
 *.d
 
